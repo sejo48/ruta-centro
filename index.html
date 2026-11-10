@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Salidas - Asignación de Asientos</title>
 <style>
 :root{
@@ -198,6 +198,37 @@ select:focus,input:focus{border-color:#60a5fa}
 .christmas-brand span{color:#00cbd8}
 .christmas-countdown{font-size:clamp(14px,3.6vw,22px);font-weight:700;line-height:1.4;color:#f4d394;margin:12px 0 0;overflow-wrap:break-word}
 @media(max-width:380px){.christmas-banner{gap:12px;padding:32px 14px 18px}.christmas-logo{flex-basis:60px;height:60px;border-radius:20px}.christmas-hat{font-size:36px;top:-21px}.christmas-brand{letter-spacing:-.5px}}
+
+/* Diseño fluido para ocupar la pantalla disponible. */
+html,body{width:100%;min-height:100%;overflow-wrap:break-word}
+.app{max-width:none;min-height:100vh;min-height:100dvh;margin:0;border-radius:0;box-shadow:none;padding:20px max(12px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.app>*{min-width:0}
+.add-row input{min-width:0;flex:1}
+.add-row button{flex:0 0 80px}
+.controls-title{gap:10px;flex-wrap:wrap}
+select,input{min-width:0;font-size:16px}
+.modal{max-height:calc(100dvh - 32px);overflow-y:auto}
+.name-item span{min-width:0;overflow-wrap:anywhere}
+.name-item button{flex-shrink:0}
+@media(max-width:600px){
+  .app{padding-top:max(10px,env(safe-area-inset-top))}
+  .christmas-banner{gap:12px;padding:30px 14px 16px;margin-bottom:14px}
+  .christmas-logo{flex-basis:60px;height:60px;border-radius:20px}
+  .christmas-hat{width:42px;height:37px;top:-20px}
+  .christmas-copy{flex:1}
+  .christmas-brand{font-size:clamp(20px,6.5vw,32px);letter-spacing:-.5px}
+  .christmas-countdown{font-size:clamp(14px,3.8vw,20px);margin-top:7px}
+  .topbar{margin-bottom:10px}
+  .theme,.export-btn{width:44px;height:44px}
+  .reference{margin-bottom:12px;box-shadow:none}
+  .board{margin-bottom:16px}
+  .board th{height:32px}
+  .board td{height:clamp(44px,12vw,64px)}
+  .seat{font-size:clamp(11px,3.3vw,16px);padding:3px}
+  .primary{min-height:44px;padding:8px 12px}
+  select,input{height:44px}
+  .add-row input{height:44px}
+}
 </style>
 </head>
 <body>
