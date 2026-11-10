@@ -184,10 +184,33 @@ select:focus,input:focus{border-color:#60a5fa}
   .board th{font-size:13px}
   .board td{height:48px}
 }
+
+/* Banner navideño: independiente de los datos de pasajeros. */
+.christmas-banner{position:relative;display:flex;align-items:center;gap:18px;overflow:hidden;margin:0 0 20px;padding:36px 24px 24px;background:radial-gradient(ellipse at 8% 65%,#00343e 0,transparent 48%),#040819;border:1px solid #1e293b;border-radius:10px;color:#fff}
+.christmas-lights{position:absolute;top:6px;left:0;right:0;height:12px;border-top:2px solid #475569;border-radius:50%;display:flex;justify-content:space-around;pointer-events:none}
+.christmas-lights i{display:block;width:8px;height:13px;border-radius:50%;background:#f4d394;box-shadow:0 0 12px #f4d39466}
+.christmas-lights i:nth-child(even){background:#e9a580;box-shadow:0 0 12px #e9a58066}
+.christmas-logo{position:relative;flex:0 0 76px;height:76px;display:grid;place-items:center;border-radius:24px;background:linear-gradient(135deg,#03c9bc,#009dbd);box-shadow:0 0 22px #00becb33}
+.christmas-logo::before{content:"";border-top:13px solid transparent;border-bottom:13px solid transparent;border-left:22px solid #fff;margin-left:5px}
+.christmas-hat{position:absolute;top:-24px;left:-7px;font-size:43px;line-height:1;transform:rotate(-15deg)}
+.christmas-copy{min-width:0}
+.christmas-brand{font-size:clamp(20px,5.5vw,36px);font-weight:800;letter-spacing:-1px;white-space:nowrap;line-height:1.1}
+.christmas-brand span{color:#00cbd8}
+.christmas-countdown{font-size:clamp(14px,3.6vw,22px);font-weight:700;line-height:1.4;color:#f4d394;margin:12px 0 0;overflow-wrap:break-word}
+@media(max-width:380px){.christmas-banner{gap:12px;padding:32px 14px 18px}.christmas-logo{flex-basis:60px;height:60px;border-radius:20px}.christmas-hat{font-size:36px;top:-21px}.christmas-brand{letter-spacing:-.5px}}
 </style>
 </head>
 <body>
 <div class="app" id="app">
+  <section class="christmas-banner" aria-label="BoxPlay TV: cuenta regresiva para Navidad">
+    <div class="christmas-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="christmas-logo" aria-hidden="true"><svg class="christmas-hat" width="50" height="44" viewBox="0 0 60 52" aria-hidden="true"><path d="M7 37C9 8 27-3 43 12l9 15-12 5-9-13-6 20Z" fill="#ef2345"/><rect x="3" y="34" width="38" height="12" rx="6" fill="#fff8e9"/><circle cx="49" cy="29" r="9" fill="#fff8e9"/></svg></div>
+    <div class="christmas-copy">
+      <div class="christmas-brand">BOXPLAY<span>TV</span></div>
+      <p class="christmas-countdown" id="christmasCountdown" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
   <div class="topbar">
     <h1 class="title">Salidas</h1>
     <div class="top-actions">
@@ -524,6 +547,33 @@ if(localStorage.getItem(THEME_KEY)==='light') app.classList.add('light');
 
 renderNames();
 renderBoard();
+</script>
+
+<script>
+// Compara fechas de calendario en Costa Rica, sin depender de la zona del dispositivo.
+(function(){
+  const output = document.getElementById('christmasCountdown');
+  const calendar = new Intl.DateTimeFormat('en-US', {
+    timeZone:'America/Costa_Rica',year:'numeric',month:'numeric',day:'numeric'
+  });
+  function christmasMessage(now){
+    const parts = {};
+    calendar.formatToParts(now).forEach(part => { parts[part.type] = part.value; });
+    const year = Number(parts.year), month = Number(parts.month), day = Number(parts.day);
+    if(month === 12 && day === 25) return '🎄 ¡Feliz Navidad!';
+    const targetYear = month === 12 && day > 25 ? year + 1 : year;
+    const days = Math.round((Date.UTC(targetYear,11,25) - Date.UTC(year,month-1,day)) / 86400000);
+    return '🎄 ' + days + (days === 1 ? ' día para Navidad' : ' días para Navidad');
+  }
+  function updateCountdown(){
+    const message = christmasMessage(new Date());
+    if(output.textContent !== message) output.textContent = message;
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+  document.addEventListener('visibilitychange', updateCountdown);
+  window.addEventListener('pageshow', updateCountdown);
+})();
 </script>
 </body>
 </html>
